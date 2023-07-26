@@ -23,7 +23,7 @@ async def create_task(task: Task):
     return {"message": "Task has been successfully created."}
 
 
-@router.post("/tasks/{task_id}", status_code=status.HTTP_200_OK)
+@router.get("/tasks/{task_id}", status_code=status.HTTP_200_OK)
 async def retrieve_task(task_id: UUID) -> Task:
     task = await Task.get(task_id)
     return task
@@ -46,3 +46,18 @@ async def update_task(updated_task: Task, task_id: UUID):
     await task.save()
 
     return task
+
+
+@router.delete("/tasks/{task_id}", status_code=status.HTTP_410_GONE)
+async def delete_task(task_id: UUID):
+    task = await Task.get(task_id)
+
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Task not found"
+        )
+
+    await task.delete()
+
+    return {"message": "Task was successfully deleted."}

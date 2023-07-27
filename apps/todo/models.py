@@ -19,8 +19,8 @@ class Task(Document):
     name: str
     description: Optional[str] = None
     status: Optional[TaskStatus]
-    date_created: datetime
-    date_updated: datetime
+    date_created: datetime | None = None
+    date_updated: datetime | None = None
 
     class Settings:
         name = 'tasks'
